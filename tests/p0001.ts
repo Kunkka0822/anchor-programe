@@ -29,4 +29,19 @@ describe('p0001', () => {
     assert.ok(account.count.toString() == 0);
     _baseAccount = baseAccount;
   });
+
+  it('Increments a counter', async () => {
+    const baseAccount = _baseAccount;
+    await program.rpc.increment({
+      accounts: {
+        baseAccount: baseAccount.publicKey,
+      },
+    });
+
+    const account = await program.account.baseAccount.fetch(
+      baseAccount.publicKey
+    );
+    console.log('After increment: ', account.count.toString());
+    assert.ok(account.count.toString() == 1);
+  });
 });
