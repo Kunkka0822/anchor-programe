@@ -1,7 +1,7 @@
 [features]
 seeds = false
 [programs.localnet]
-p0001 = "Fg6PaFpoGXkYsidMpWTK6W2BeZ7FEfcYkg476zPFsLnS"
+p0001 = "2DhNq3n17844BkNDngD9iDgMPwLYqUxo4VcnWjLUry6E"
 
 [registry]
 url = "https://anchor.projectserum.com"
