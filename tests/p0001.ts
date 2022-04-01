@@ -1,16 +1,29 @@
-import * as anchor from "@project-serum/anchor";
-import { Program } from "@project-serum/anchor";
-import { P0001 } from "../target/types/p0001";
+const assert = require('assert');
+const anchor = require('@project-serum/anchor');
+const { SystemProgram } = anchor.web3;
 
-describe("p0001", () => {
-  // Configure the client to use the local cluster.
-  anchor.setProvider(anchor.Provider.env());
+describe('p0001', () => {
+  const provider = anchor.Provider.env();
+  anchor.setProvider(provider);
+  const program = anchor.workspace.p0001;
+  // To be filled in by the create test and used by the increment test.
+  let _baseAccount;
 
-  const program = anchor.workspace.P0001 as Program<P0001>;
+  it('Creates a counter', async () => {
+    const baseAccount = anchor.web3.Keypair.generate();
+    await program.rpc.create({
+      accounts: {
+        baseAccount: baseAccount.publicKey,
+        user:provider.wallet.publicKey,
+        systemProgram: SystemProgram.programId,
+      }
+    });
 
-  it("Is initialized!", async () => {
-    // Add your test here.
-    const tx = await program.rpc.initialize({});
-    console.log("Your transaction signature", tx);
+    const account = await program.account.baseAccount.fetch(
+      baseAccount.publicKey
+    );
+    console.log('Initial count: ', account.count.toString());
+    assert.ok(account.count.toString() == 0);
+    _baseAccount = baseAccount;
   });
 });
